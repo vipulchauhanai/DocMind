@@ -762,35 +762,67 @@
             <h2>Product Walkthrough</h2>
             
             <div class="gallery-container">
-                <!-- Item 1: Chat Mockup -->
+                <!-- Item 1: Empty Dashboard -->
                 <div class="gallery-item">
                     <div class="gallery-img-wrapper">
-                        <img src="assets/chat_mockup.png" alt="DocMind Interactive PDF Chat View" class="gallery-img">
+                        <img src="assets/empty_dashboard.png" alt="DocMind Clean Local Dashboard" class="gallery-img">
                     </div>
                     <div class="gallery-info">
-                        <h3>Secure Local Chat</h3>
-                        <p>Discuss, analyze, and query files directly on your desktop. DocMind spins up a lightweight AI engine locally to deliver lightning-fast responses without any cloud dependence.</p>
+                        <h3>Clean On-Device Workspace</h3>
+                        <p>Launch DocMind directly from your desktop. Enjoy an uncluttered, premium interface designed from the ground up for high-performance offline document interaction.</p>
                         <ul>
-                            <li>Markdown formatted summaries and checklists</li>
-                            <li>Instant page citation links so you can verify answers</li>
-                            <li>Multi-document context processing</li>
+                            <li>Zero cloud dependencies — spins up a secure local server</li>
+                            <li>Instant document loading & status alerts</li>
+                            <li>Sleek, eye-friendly dark aesthetic</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Item 2: Extraction Mockup -->
+                <!-- Item 2: Hindi OCR -->
                 <div class="gallery-item">
                     <div class="gallery-info">
-                        <h3>Smart Structured Extraction</h3>
-                        <p>Manually scanning invoices, resumes, announcements, and receipts is a thing of the past. DocMind classifies document types and extracts critical values automatically into clean data profiles.</p>
+                        <h3>Multilingual OCR Chat</h3>
+                        <p>Discuss, summarize, and translate files in any language. In this example, DocMind scans a Hindi Wikipedia document, understanding complex structures and providing precise responses and source citations in Hindi.</p>
                         <ul>
-                            <li>Auto-detection of document categories</li>
-                            <li>Intelligent parsing of candidate profiles, billing values, and IDs</li>
-                            <li>Export extracted data to CSV or copy table values instantly</li>
+                            <li>Robust on-device OCR engine for scanned files</li>
+                            <li>Precise page-level citations for every single answer</li>
+                            <li>Complete language support for global documents</li>
                         </ul>
                     </div>
                     <div class="gallery-img-wrapper">
-                        <img src="assets/extraction_mockup.png" alt="DocMind Smart Data Extraction View" class="gallery-img">
+                        <img src="assets/hindi_ocr.png" alt="DocMind Multilingual OCR Chat View" class="gallery-img">
+                    </div>
+                </div>
+
+                <!-- Item 3: Electricity Bill -->
+                <div class="gallery-item">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/electricity_bill.png" alt="DocMind Smart Structured Extraction" class="gallery-img">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Smart Structured Extraction</h3>
+                        <p>Extract fields, tables, dates, and amounts from notices, bills, CVs, or receipts instantly. DocMind identifies document categories and extracts key data fields dynamically.</p>
+                        <ul>
+                            <li>Extract account numbers, payable amounts, and due dates</li>
+                            <li>Automatic table structure understanding</li>
+                            <li>Direct copy-to-clipboard or CSV export buttons</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Item 4: PDF Loading / Indexing -->
+                <div class="gallery-item">
+                    <div class="gallery-info">
+                        <h3>Process Large Books Instantly</h3>
+                        <p>No document is too large. DocMind utilizes local chunking and vector mapping to index huge books (like 600+ page textbooks) in seconds, ensuring instant search response times.</p>
+                        <ul>
+                            <li>High-speed local text parsing and vector indexing</li>
+                            <li>Progress bar tracking and real-time step status</li>
+                            <li>Optimized RAM consumption for average laptops</li>
+                        </ul>
+                    </div>
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/pdf_loading.png" alt="DocMind Large PDF Processing View" class="gallery-img">
                     </div>
                 </div>
             </div>
@@ -913,6 +945,23 @@
                     </div>
                     <div class="faq-answer">
                         To function completely offline, DocMind bundles the full weights for the Qwen Chat model (~1.8 GB) and the BGE-M3 text-embedding models (~2.2 GB), along with system installer files. Bundling everything ensures it can be installed on air-gapped computers or in places with no internet connection.
+                    </div>
+                </div>
+
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        How do I bypass the "Windows protected your PC" blue warning screen?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Since DocMind is a brand-new local application, it does not carry an expensive Microsoft EV code certificate yet. Windows Defender SmartScreen may show a blue warning during setup. This is completely normal for new indie software.
+                        <br><br>
+                        To bypass it and run the installer:
+                        <ol style="margin-left: 20px; margin-top: 8px;">
+                            <li>Click the <strong>'More info'</strong> link on the blue alert screen.</li>
+                            <li>Click the <strong>'Run anyway'</strong> button that appears.</li>
+                        </ol>
+                        <img src="assets/smartscreen_warning.png" alt="SmartScreen bypass walkthrough" style="max-width: 100%; max-width: 320px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 15px; display: block; box-shadow: var(--shadow);">
                     </div>
                 </div>
             </div>
