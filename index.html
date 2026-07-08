@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DocMind - Ask questions about your PDFs locally. Your documents stay on your computer. 100% private AI document analysis.">
+    <title>DocMind | Private Local AI Document Analysis</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #030712;
+            --surface-color: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --border-radius-lg: 24px;
+            --border-radius-md: 16px;
+            --border-radius-sm: 8px;
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.12), transparent 40%);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            padding: 1.25rem 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(3, 7, 18, 0.6);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-nav {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: var(--text-main) !important;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 5% 4rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: #a5b4fc;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to bottom right, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p.lead {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            color: var(--text-muted);
+            max-width: 750px;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Download Section */
+        .download-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 5rem;
+            padding: 0 2rem;
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .download-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            text-align: left;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow);
+        }
+
+        .download-card.primary {
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, rgba(17, 24, 39, 0.75) 100%);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .download-card.primary:hover {
+            border-color: rgba(99, 102, 241, 0.6);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-bottom-left-radius: var(--border-radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+        }
+
+        .card-size {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.04);
+            color: white;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Showcase / Gallery */
+        .showcase {
+            padding: 5rem 8%;
+            max-width: 1300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .showcase h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .gallery-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
+        }
+
+        .gallery-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            text-align: left;
+        }
+
+        @media (max-width: 900px) {
+            .gallery-item {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .gallery-item:nth-child(even) .gallery-info {
+                order: -1;
+            }
+        }
+
+        .gallery-img-wrapper {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-img-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-md);
+            display: block;
+        }
+
+        .gallery-info h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .gallery-info p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .gallery-info ul {
+            list-style: none;
+        }
+
+        .gallery-info ul li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .gallery-info ul li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* Demo Video Block */
+        .demo-video-section {
+            padding: 5rem 5%;
+            background: rgba(17, 24, 39, 0.4);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .video-wrapper {
+            max-width: 850px;
+            margin: 3rem auto 0;
+            position: relative;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            aspect-ratio: 16/9;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* Beautiful simulated player interface */
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('assets/chat_mockup.png');
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            filter: brightness(1.1);
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+            z-index: 2;
+        }
+
+        .video-wrapper:hover .play-button {
+            transform: scale(1.1);
+            background: var(--primary-hover);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.7);
+        }
+
+        /* Real Video Embed (initially hidden, loaded on click) */
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            padding: 5rem 8%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: 2rem;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            padding: 5rem 8%;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2.5rem;
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1.25rem 2rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .cross-icon {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 5rem 8%;
+            max-width: 850px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .faq-grid {
+            margin-top: 3rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .faq-item {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .faq-question {
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            padding: 5rem 8%;
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .feedback-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: var(--border-radius-lg);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 8%;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: rgba(3, 7, 18, 0.8);
+            margin-top: auto;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!--
+    ========================================================================
+    CONFIGURATION: DOWNLOAD & FEEDBACK LINKS
+    Instructions: Simply replace the '#' in the variable links below
+    with your actual Google Drive URLs and your Google Form URL!
+    ========================================================================
+    -->
+    <script>
+        const CONFIG = {
+            // Replace with your Google Drive link for: DocMind_Online_Beta_v1.3_Setup.exe
+            onlineInstallerUrl: "https://drive.google.com/file/d/1z0LGJ__sYe9JbbDuJYbBvPZdytVv3uyg/view?usp=sharing",
+            
+            // Replace with your Google Drive link for: DocMind_Beta_v1.1.zip (Offline Installer Package)
+            offlinePackageUrl: "https://drive.google.com/file/d/1pRPwlt5e0VFVRrTxSSgsz1u6JnC6qQfr/view?usp=sharing",
+            
+            // Replace with your Google Form Feedback Link
+            feedbackFormUrl: "https://forms.google.com/your-actual-feedback-form-url",
+            
+            // OPTIONAL: If you post a Youtube / Loom demo video, insert its embed link here
+            videoEmbedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" // e.g. https://www.youtube.com/embed/VIDEO_ID
+        };
+
+        // Inject the configuration into links on load
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.link-online-installer').forEach(el => el.href = CONFIG.onlineInstallerUrl);
+            document.querySelectorAll('.link-offline-package').forEach(el => el.href = CONFIG.offlinePackageUrl);
+            document.querySelectorAll('.link-feedback-form').forEach(el => el.href = CONFIG.feedbackFormUrl);
+        });
+    </script>
+
+    <!-- Navigation Header -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                DocMind
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#gallery">Screenshots</a>
+                <a href="#demo">Demo Video</a>
+                <a href="#faq">FAQ</a>
+                <a href="#" class="link-feedback-form" target="_blank">Give Feedback</a>
+                <a href="#download" class="btn-nav">Download</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="badge">BETA RELEASE v1.3</div>
+            <h1>Your Documents. Your AI.<br><span style="background: linear-gradient(to right, #6366f1, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">100% Offline & Private.</span></h1>
+            <p class="lead">Ask questions, read tables, and extract structured fields from your PDFs locally. No data ever leaves your computer. No cloud APIs, no privacy leaks.</p>
+            
+            <div class="privacy-note" style="margin-bottom: 4rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Zero Internet required after installation.
+            </div>
+        </section>
+
+        <!-- Download Cards -->
+        <section class="download-container" id="download">
+            <div class="downloads-grid">
+                <!-- Online Installer -->
+                <div class="download-card primary">
+                    <div class="card-tag">⭐ Recommended</div>
+                    <div>
+                        <div class="card-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Online Installer
+                        </div>
+                        <div class="card-size">~ 218 MB</div>
+                        <p class="card-desc">
+                            Fastest way to get started. Automatically checks your system and downloads only missing AI weights. Safe, state-aware setup wizard.
+                        </p>
+                    </div>
+                    <a href="#" class="btn-download btn-primary link-online-installer" id="dl-online">
+                        Download for Windows (64-bit)
+                    </a>
+                </div>
+
+                <!-- Offline Installer -->
+                <div class="download-card">
+                    <div>
+                        <div class="card-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Offline Installer
+                        </div>
+                        <div class="card-size">~ 6.5 GB</div>
+                        <p class="card-desc">
+                            Perfect for isolated corporate networks or slower internet. Includes the setup files along with all AI model weights pre-loaded.
+                        </p>
+                    </div>
+                    <a href="#" class="btn-download btn-secondary link-offline-package" id="dl-offline">
+                        Download Complete ZIP Package
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery / Screenshot Walkthrough -->
+        <section class="showcase" id="gallery">
+            <h2>Product Walkthrough</h2>
+            
+            <div class="gallery-container">
+                <!-- Item 1: Chat Mockup -->
+                <div class="gallery-item">
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/chat_mockup.png" alt="DocMind Interactive PDF Chat View" class="gallery-img">
+                    </div>
+                    <div class="gallery-info">
+                        <h3>Secure Local Chat</h3>
+                        <p>Discuss, analyze, and query files directly on your desktop. DocMind spins up a lightweight AI engine locally to deliver lightning-fast responses without any cloud dependence.</p>
+                        <ul>
+                            <li>Markdown formatted summaries and checklists</li>
+                            <li>Instant page citation links so you can verify answers</li>
+                            <li>Multi-document context processing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Item 2: Extraction Mockup -->
+                <div class="gallery-item">
+                    <div class="gallery-info">
+                        <h3>Smart Structured Extraction</h3>
+                        <p>Manually scanning invoices, resumes, announcements, and receipts is a thing of the past. DocMind classifies document types and extracts critical values automatically into clean data profiles.</p>
+                        <ul>
+                            <li>Auto-detection of document categories</li>
+                            <li>Intelligent parsing of candidate profiles, billing values, and IDs</li>
+                            <li>Export extracted data to CSV or copy table values instantly</li>
+                        </ul>
+                    </div>
+                    <div class="gallery-img-wrapper">
+                        <img src="assets/extraction_mockup.png" alt="DocMind Smart Data Extraction View" class="gallery-img">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Video Section -->
+        <section class="demo-video-section" id="demo">
+            <h2>See DocMind in Action</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Watch how quickly DocMind starts up and extracts data entirely offline.</p>
+            
+            <div class="video-wrapper" id="video-container" onclick="loadVideoEmbed()">
+                <div class="video-placeholder" id="vid-placeholder">
+                    <div class="play-button">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                </div>
+                <iframe id="video-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <!-- Core Features Grid -->
+        <section class="features-grid" id="features">
+            <div class="feature-card">
+                <span class="feature-icon">🔒</span>
+                <h3>100% On-Device</h3>
+                <p>Your documents, indexes, and chats stay on your local disk. DocMind works completely offline, eliminating cloud security risks.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🛡️</span>
+                <h3>Enterprise Compliant</h3>
+                <p>Designed for professionals handling sensitive data—such as legal cases, client medical files, financial reports, or personal IDs.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">⚙️</span>
+                <h3>Smart Verification</h3>
+                <p>Our verification installer detects pre-installed models on your device to ensure you never waste space on redundant installs.</p>
+            </div>
+        </section>
+
+        <!-- Cloud vs Local Table -->
+        <section class="comparison-section">
+            <h2>Why Choose Local AI?</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>DocMind (Local)</th>
+                        <th>Standard Web AI (Cloud)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Privacy</td>
+                        <td><span class="check-icon">✓</span> 100% Private (No data leaves PC)</td>
+                        <td><span class="cross-icon">✗</span> Transmitted to remote servers</td>
+                    </tr>
+                    <tr>
+                        <td>Offline Capability</td>
+                        <td><span class="check-icon">✓</span> Yes (Runs without internet)</td>
+                        <td><span class="cross-icon">✗</span> Fails when network goes down</td>
+                    </tr>
+                    <tr>
+                        <td>Subscription Fees</td>
+                        <td><span class="check-icon">✓</span> Free Beta (No recurring charges)</td>
+                        <td><span class="cross-icon">✗</span> High monthly SaaS costs</td>
+                    </tr>
+                    <tr>
+                        <td>Processing Speed</td>
+                        <td><span class="check-icon">✓</span> Instant (Local hardware speed)</td>
+                        <td><span class="cross-icon">✗</span> Subject to network lag/queues</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- FAQs -->
+        <section class="faq-section" id="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Is my data completely secure?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, absolutely. DocMind is designed to run completely offline. Once installed, it does not send any files, prompts, metadata, or queries to remote servers. All vector indexing and model inferencing occur on your CPU/GPU directly.
+                    </div>
+                </div>
+
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        What are the minimum system requirements?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        To run the AI models locally, we recommend:
+                        <ul style="margin-left: 20px; margin-top: 8px; list-style-type: disc;">
+                            <li>OS: Windows 10 or 11 (64-bit)</li>
+                            <li>RAM: 8 GB minimum (16 GB highly recommended)</li>
+                            <li>Processor: Modern Intel Core i5/AMD Ryzen 5 or better</li>
+                            <li>Storage: SSD highly recommended (~8 GB free space for full models)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        How does the Online Installer work?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        The online installer is a lightweight wrapper. Upon launching, it scans your system for the Ollama engine, the BGE document AI model, and the Qwen Chat model. It only downloads the components you do not already have installed, saving you significant bandwidth.
+                    </div>
+                </div>
+
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        Why is the offline ZIP package so large (6.5 GB)?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        To function completely offline, DocMind bundles the full weights for the Qwen Chat model (~1.8 GB) and the BGE-M3 text-embedding models (~2.2 GB), along with system installer files. Bundling everything ensures it can be installed on air-gapped computers or in places with no internet connection.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback Call To Action -->
+        <section class="feedback-section" id="feedback">
+            <div class="feedback-card">
+                <h2 style="margin-bottom: 1rem;">Help Us Shape DocMind</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">We are currently in active Beta! If you encounter any bugs, have feature requests, or want to share your experience, we would love to hear from you.</p>
+                <a href="#" class="btn-download btn-primary link-feedback-form" style="max-width: 250px; margin: 0 auto;" target="_blank">
+                    Open Feedback Form
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 DocMind. Built for absolute data privacy.</p>
+        <p>
+            <a href="#" class="link-feedback-form" target="_blank">Feedback</a> &bull; 
+            <a href="#faq">FAQ</a> &bull; 
+            <a href="#download">Downloads</a>
+        </p>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            element.classList.toggle('active');
+            const toggle = element.querySelector('.faq-toggle');
+            if (element.classList.contains('active')) {
+                toggle.textContent = '×';
+            } else {
+                toggle.textContent = '+';
+            }
+        }
+
+        function loadVideoEmbed() {
+            const iframe = document.getElementById('video-iframe');
+            const placeholder = document.getElementById('vid-placeholder');
+            
+            iframe.src = CONFIG.videoEmbedUrl + "?autoplay=1";
+            iframe.style.display = 'block';
+            placeholder.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
