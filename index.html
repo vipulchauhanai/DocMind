@@ -673,14 +673,42 @@
             feedbackFormUrl: "https://forms.gle/vBbVyPFwbwesTyFaA",
             
             // OPTIONAL: If you post a Youtube / Loom demo video, insert its embed link here
-            videoEmbedUrl: "https://www.youtube.com/embed/g-5qIP-zofM" // e.g. https://www.youtube.com/embed/VIDEO_ID
+            videoEmbedUrl: "https://www.youtube.com/embed/g-5qIP-zofM", // e.g. https://www.youtube.com/embed/VIDEO_ID
+
+            // Replace with your Google Analytics Measurement ID (e.g. "G-ABC123XYZ")
+            googleAnalyticsId: "",
+
+            // Replace with your Microsoft Clarity Project ID (e.g. "x1y2z3w4")
+            microsoftClarityId: ""
         };
 
-        // Inject the configuration into links on load
+        // Inject the configuration into links and initialize analytics on load
         window.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.link-online-installer').forEach(el => el.href = CONFIG.onlineInstallerUrl);
             document.querySelectorAll('.link-offline-package').forEach(el => el.href = CONFIG.offlinePackageUrl);
             document.querySelectorAll('.link-feedback-form').forEach(el => el.href = CONFIG.feedbackFormUrl);
+
+            // Google Analytics Dynamic Injection
+            if (CONFIG.googleAnalyticsId) {
+                const script = document.createElement('script');
+                script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
+                script.async = true;
+                document.head.appendChild(script);
+
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = function(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', CONFIG.googleAnalyticsId);
+            }
+
+            // Microsoft Clarity Dynamic Injection
+            if (CONFIG.microsoftClarityId) {
+                (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                })(window,document,"clarity","script",CONFIG.microsoftClarityId);
+            }
         });
     </script>
 
@@ -691,7 +719,7 @@
                 <div class="logo-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 </div>
-                DocMind
+                DocMind Beta v1.3
             </a>
             <div class="nav-links">
                 <a href="#features">Features</a>
@@ -753,6 +781,16 @@
                     <a href="#" class="btn-download btn-secondary link-offline-package" id="dl-offline">
                         Download Complete ZIP Package
                     </a>
+                </div>
+            </div>
+
+            <!-- Trust Stats & System Requirements Badge -->
+            <div style="margin-top: 3rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.25rem;">
+                <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); padding: 8px 18px; border-radius: 30px; font-size: 0.9rem; font-weight: 700; color: #a5b4fc; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);">
+                    <span>⭐</span> 143+ Downloads during early access
+                </div>
+                <div style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; max-width: 650px;">
+                    <strong>System Requirements:</strong> Windows 10/11 (64-bit) &bull; 8 GB RAM Recommended &bull; Internet connection is only required during setup (Online Installer) or for downloading models.
                 </div>
             </div>
         </section>
@@ -982,6 +1020,9 @@
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 DocMind. Built for absolute data privacy.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; margin-bottom: 1rem;">
+            Built by <strong>Vipul Chauhan</strong> &mdash; Independent AI Developer
+        </p>
         <p>
             <a href="#" class="link-feedback-form" target="_blank">Feedback</a> &bull; 
             <a href="#faq">FAQ</a> &bull; 
