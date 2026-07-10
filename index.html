@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="DocMind - Ask questions about your PDFs locally. Your documents stay on your computer. 100% private AI document analysis.">
     <title>DocMind | Private Local AI Document Analysis</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9EZM8Z6H4M"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-9EZM8Z6H4M');
+    </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -675,9 +685,6 @@
             // OPTIONAL: If you post a Youtube / Loom demo video, insert its embed link here
             videoEmbedUrl: "https://www.youtube.com/embed/g-5qIP-zofM", // e.g. https://www.youtube.com/embed/VIDEO_ID
 
-            // Replace with your Google Analytics Measurement ID (e.g. "G-ABC123XYZ")
-            googleAnalyticsId: "G-9EZM8Z6H4M",
-
             // Replace with your Microsoft Clarity Project ID (e.g. "x1y2z3w4")
             microsoftClarityId: ""
         };
@@ -687,19 +694,6 @@
             document.querySelectorAll('.link-online-installer').forEach(el => el.href = CONFIG.onlineInstallerUrl);
             document.querySelectorAll('.link-offline-package').forEach(el => el.href = CONFIG.offlinePackageUrl);
             document.querySelectorAll('.link-feedback-form').forEach(el => el.href = CONFIG.feedbackFormUrl);
-
-            // Google Analytics Dynamic Injection
-            if (CONFIG.googleAnalyticsId) {
-                const script = document.createElement('script');
-                script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.googleAnalyticsId}`;
-                script.async = true;
-                document.head.appendChild(script);
-
-                window.dataLayer = window.dataLayer || [];
-                window.gtag = function(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', CONFIG.googleAnalyticsId);
-            }
 
             // Microsoft Clarity Dynamic Injection
             if (CONFIG.microsoftClarityId) {
